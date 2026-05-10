@@ -1,267 +1,138 @@
-"use client"
+"use client";
+import { useState, useRef, useEffect } from "react";
+import { Menu, X, ChevronDown } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { navItems, type NavItem } from "@/lib/navigation";
 
-import { useState, useRef, useEffect } from "react"
-import { Menu, X, ChevronDown } from "lucide-react"
-import Image from "next/image"
+/* ── Desktop dropdown panel ───────────────────────────────────────────── */
+function DropdownPanel({ items, onClose }: { items: NavItem[]; onClose: () => void }) {
+  return (
+    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 min-w-[220px] bg-[var(--warm-white)] rounded-2xl shadow-xl border border-flame-orange/20 py-2 z-50">
+      {items.map((item) => (
+        <Link
+          key={item.href}
+          href={item.href!}
+          onClick={onClose}
+          className="block px-5 py-2.5 text-sm font-medium text-[var(--charcoal-gray)] hover:text-[var(--flame-orange)] hover:bg-[var(--flame-orange)]/5 transition-colors"
+        >
+          {item.label}
+        </Link>
+      ))}
+    </div>
+  );
+}
 
-export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isServicesOpen, setIsServicesOpen] = useState(false)
-  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
+/* ── Single nav item (link or dropdown trigger) ───────────────────────── */
+function NavItem({ item }: { item: NavItem }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsServicesOpen(false)
-      }
-    }
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
-    if (isServicesOpen) {
-      document.addEventListener("mousedown", handleClickOutside)
-    }
+  if (!item.children) {
+    return (
+      <Link href={item.href!} className="text-sm font-medium text-[var(--charcoal-gray)] hover:text-[var(--flame-orange)] transition-colors whitespace-nowrap">
+        {item.label}
+      </Link>
+    );
+  }
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [isServicesOpen])
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="flex items-center gap-1 text-sm font-medium text-[var(--charcoal-gray)] hover:text-[var(--flame-orange)] transition-colors whitespace-nowrap cursor-pointer"
+        aria-expanded={open}
+      >
+        {item.label}
+        <ChevronDown size={14} className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && <DropdownPanel items={item.children} onClose={() => setOpen(false)} />}
+    </div>
+  );
+}
 
-  const navItems = [
-    { name: "HOME", href: "/" },
-    { name: "ABOUT US", href: "/about" },
-    { name: "SERVICES", href: "#services", hasDropdown: true },
-    { name: "REVIEWS", href: "/reviews" },
-    { name: "BLOGS", href: "/blog" },
-    { name: "CONTACT", href: "/contact" },
-  ]
+/* ── Mobile accordion item ────────────────────────────────────────────── */
+function MobileItem({ item, onClose }: { item: NavItem; onClose: () => void }) {
+  const [open, setOpen] = useState(false);
 
-  const services = [
-    {
-      name: "Logo design",
-      description: "Make your company's identity stand out with a logo",
-      icon: <lord-icon
-                        src="https://cdn.lordicon.com/rljrflzd.json"
-                        trigger="loop"
-                        delay="2000"
-                        colors="primary:#2C2C2C,secondary:#2C2C2C"
-                        style={{ width: "60px", height: "60px" }}
-                    ></lord-icon>,
-      href: "/services/logo-design",
-    },
-    { name: "Branding",
-      description: "An effective and strategized branding strategy",
-      icon: <lord-icon
-                        src="https://cdn.lordicon.com/pkvlegzp.json"
-                        trigger="loop"
-                        delay="2000"
-                        colors="primary:#2C2C2C,secondary:#2C2C2C"
-                        style={{ width: "60px", height: "60px" }}
-                    ></lord-icon>,
-      href: "/services/branding",
-     },
-    {
-      name: "Web design & development",
-      description: "Convert visitors to customers with a website that works",
-      icon: <lord-icon
-                        src="https://cdn.lordicon.com/ailnzwyn.json"
-                        trigger="loop"
-                        delay="2000"
-                        colors="primary:#2C2C2C,secondary:#2C2C2C"
-                        style={{ width: "60px", height: "60px" }}
-                    ></lord-icon>,
-      href: "/services/web",              
-    },
-    { name: "Video animation",
-      description: "Bringing your message to life with animation",
-      icon: <lord-icon
-                        src="https://cdn.lordicon.com/ugllxeyl.json"
-                        trigger="loop"
-                        delay="2000"
-                        colors="primary:#2C2C2C,secondary:#2C2C2C"
-                        style={{ width: "60px", height: "60px" }}
-                    ></lord-icon>,
-      href: "/services/animation",
-     },
-    // {
-    //   name: "Business marketing",
-    //   description: "Let us unlock your brand's potential using our unique approach",
-    //   icon: <lord-icon
-    //                     src="https://cdn.lordicon.com/lbcxnxti.json"
-    //                     trigger="loop"
-    //                     delay="2000"
-    //                     colors="primary:#2C2C2C,secondary:#2C2C2C"
-    //                     style={{ width: "60px", height: "60px" }}
-    //                 ></lord-icon>,
-    //   href: "/services/business",
-    // },
-    { name: "Social Media",
-      description: "Promote your brand across a variety of platforms",
-      icon: <lord-icon
-                        src="https://cdn.lordicon.com/hmabmtlg.json"
-                        trigger="loop"
-                        delay="2000"
-                        colors="primary:#2C2C2C,secondary:#2C2C2C"
-                        style={{ width: "60px", height: "60px" }}
-                    ></lord-icon>,
-      href: "/services/social",
-    },
-    {
-      name: "Video Editing",
-      description: "A cover design that transforms stories into stunning books",
-      icon: <lord-icon
-                        src="https://cdn.lordicon.com/rrbmabsx.json"
-                        trigger="loop"
-                        delay="2000"
-                        colors="primary:#2C2C2C,secondary:#2C2C2C"
-                        style={{ width: "60px", height: "60px" }}
-                    ></lord-icon>,
-      href: "/services/video_editing",
-    },
-    { name: "Book Writing",
-      description: "Professional Book Writing Turns Your Vision into Words",
-      icon: <lord-icon
-                        src="https://cdn.lordicon.com/fikcyfpp.json"
-                        trigger="loop"
-                        delay="2000"
-                        colors="primary:#2C2C2C,secondary:#2C2C2C"
-                        style={{ width: "60px", height: "60px" }}
-                    ></lord-icon>,
-      href: "/services/content_writing",
-    },
-    { name: "Book Cover Design",
-      description: "Professional Book Writing Turns Your Vision into Words",
-      icon: <lord-icon
-                        src="https://cdn.lordicon.com/fikcyfpp.json"
-                        trigger="loop"
-                        delay="2000"
-                        colors="primary:#2C2C2C,secondary:#2C2C2C"
-                        style={{ width: "60px", height: "60px" }}
-                    ></lord-icon>,
-      href: "/services/book_cover",
-    },
-  ]
+  if (!item.children) {
+    return (
+      <Link href={item.href!} onClick={onClose}
+        className="block px-3 py-2 text-sm font-medium text-[var(--charcoal-gray)] hover:text-[var(--flame-orange)] rounded-lg hover:bg-[var(--flame-orange)]/5">
+        {item.label}
+      </Link>
+    );
+  }
+
+  return (
+    <div>
+      <button type="button" onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-[var(--charcoal-gray)] hover:text-[var(--flame-orange)] rounded-lg hover:bg-[var(--flame-orange)]/5 cursor-pointer">
+        {item.label}
+        <ChevronDown size={14} className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && (
+        <div className="ml-4 mt-1 space-y-1 border-l-2 border-[var(--flame-orange)]/20 pl-3">
+          {item.children.map((child) => (
+            <Link key={child.href} href={child.href!} onClick={onClose}
+              className="block py-1.5 text-sm text-[var(--charcoal-gray)]/80 hover:text-[var(--flame-orange)] transition-colors">
+              {child.label}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── Main Header ──────────────────────────────────────────────────────── */
+export default function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-3 md:px-18 py-3">
       <div className="container mx-auto">
         <div className="bg-[var(--warm-white)] rounded-2xl px-6 py-4 shadow-lg">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-4">
+
             {/* Logo */}
-            <div className="flex items-center">
-              <Image src="/logos/logo-01.png" alt="Inkspire Folio" width={180} height={60} className="h-14 w-auto" />
-              <Image src="/logos/logo-03.png" alt="Inkspire Folio" width={180} height={60} className="h-14 w-auto" />
-            </div>
+            <Link href="/" className="flex items-center shrink-0">
+              <Image src="/logos/logo-01.png" alt="Inkspire Folio" width={180} height={60} className="h-12 w-auto" />
+              <Image src="/logos/logo-03.png" alt="Inkspire Folio" width={180} height={60} className="h-12 w-auto" />
+            </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
+            {/* Desktop Nav */}
+            <nav className="hidden lg:flex items-center gap-4 flex-nowrap">
               {navItems.map((item) => (
-                <div key={item.name} className="relative">
-                  {item.hasDropdown ? (
-                    <div className="relative" ref={dropdownRef}>
-                      <button
-                        onClick={() => setIsServicesOpen(!isServicesOpen)}
-                        className="text-sm font-medium text-[var(--charcoal-gray)] hover:text-flame-orange transition-colors flex items-center gap-1 cursor-pointer"
-                      >
-                        {item.name}
-                        <ChevronDown size={16} />
-                      </button>
-
-                      {isServicesOpen && (
-                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[800px] bg-[var(--warm-white)] rounded-2xl shadow-xl borde p-6 z-50">
-                          <div className="grid grid-cols-3 gap-4">
-                            {services.map((service, index) => (
-                              <a
-                                key={service.name}
-                                href={service.href || "#"}
-                                className="p-4 rounded-xl border border-flame-orange hover:border-[#2c2c2c] transition-colors cursor-pointer group blockk bg-[var(--warm-white)] hover:bg-[var(--flame-orange)]"
-                                onClick={() => setIsServicesOpen(false)}
-                              >
-                                <div className="text-flame-orange text-2xl mb-2">{service.icon}</div>
-                                <h3 className="font-semibold text-charcoal-gray mb-2 group-hover:text-flame-orange transition-colors">
-                                  {service.name}
-                                </h3>
-                                <p className="text-sm text-charcoal-gray leading-relaxed">{service.description}</p>
-                              </a>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <a href={item.href} className="text-sm font-medium text-[var(--charcoal-gray)] hover:text-flame-orange">
-                      {item.name}
-                    </a>
-                  )}
-                </div>
+                <NavItem key={item.label} item={item} />
               ))}
             </nav>
 
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-[var(--charcoal-gray)] hover:text-flame-orange">
-                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-            </div>
+            {/* Mobile toggle */}
+            <button type="button" onClick={() => setIsMenuOpen((v) => !v)} className="lg:hidden text-[var(--charcoal-gray)] hover:text-[var(--flame-orange)] cursor-pointer">
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
 
-          {/* Mobile Navigation */}
+          {/* Mobile drawer */}
           {isMenuOpen && (
-            <div className="md:hidden mt-4">
-              <div className="space-y-2">
-                {navItems.map((item) => (
-                  <div key={item.name}>
-                    {item.hasDropdown ? (
-                      <div>
-                        <button
-                          onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)}
-                          className="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-[var(--charcoal-gray)] hover:text-flame-orange rounded-lg hover:bg-flame-orange/5"
-                        >
-                          {item.name}
-                          <ChevronDown
-                            size={16}
-                            className={`transition-transform ${isMobileServicesOpen ? "rotate-180" : ""}`}
-                          />
-                        </button>
-
-                        {/* Mobile Services Dropdown */}
-                        {isMobileServicesOpen && (
-                          <div className="mt-2 ml-4 space-y-2 overflow-y-auto max-h-60">
-                            {services.map((service) => (
-                              <a
-                                key={service.name}
-                                href={service.href || "#"}
-                                className="flex items-start gap-3 px-3 py-2 text-sm text-[var(--warm-white)] bg-flame-orange rounded-lg hover:bg-flame-orange/5"
-                                onClick={() => {
-                                  setIsMenuOpen(false)
-                                  setIsMobileServicesOpen(false)
-                                }}
-                              >
-                                <span className="text-flame-orange text-lg">{service.icon}</span>
-                                <div>
-                                  <div className="font-medium">{service.name}</div>
-                                  <div className="text-xs text-charcoal-gray mt-1">{service.description}</div>
-                                </div>
-                              </a>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <a
-                        href={item.href}
-                        className="block px-3 py-2 text-sm font-medium text-[var(--charcoal-grayheadr)] hover:text-flame-orange rounded-lg hover:bg-flame-orange/5"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        {item.name}
-                      </a>
-                    )}
-                  </div>
-                ))}
-              </div>
+            <div className="lg:hidden mt-4 space-y-1">
+              {navItems.map((item) => (
+                <MobileItem key={item.label} item={item} onClose={() => setIsMenuOpen(false)} />
+              ))}
             </div>
           )}
         </div>
       </div>
     </header>
-  )
+  );
 }

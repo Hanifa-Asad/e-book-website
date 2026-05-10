@@ -1,87 +1,113 @@
-import { ArrowUpRight } from "lucide-react"
-import Image from "next/image"
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
+import { socialLinks } from "@/lib/navigation";
+
+const SocialIcon = ({ icon }: { icon: string }) => {
+  const icons: Record<string, string> = {
+    instagram:  "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z",
+    facebook:   "M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z",
+    twitter:    "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z",
+    linkedin:   "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z",
+    youtube:    "M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z",
+    tiktok:     "M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z",
+    threads:    "M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.75-1.757-.513-.586-1.3-.883-2.378-.887h-.018c-.845 0-1.576.206-2.172.614-.59.406-.941.988-1.043 1.73l-2.032-.274c.174-1.32.732-2.385 1.658-3.159 1.005-.839 2.289-1.252 3.82-1.239 1.753.013 3.064.608 3.9 1.768.825 1.144 1.157 2.717 1.02 4.718l-.005.075.062.026c1.26.513 2.172 1.397 2.679 2.57.743 1.706.8 4.422-1.426 6.612-1.787 1.751-4.099 2.46-7.297 2.484z",
+    pinterest:  "M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z",
+    behance:    "M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 3.211 3.483 3.312 4.588 2.029H23.72zm-7.63-5.35c-2.03 0-2.87 1.28-3.023 2.618h5.906c-.106-1.404-.83-2.618-2.882-2.618zM9.97 12.48c.527.47.842 1.1.842 1.9 0 2.09-1.71 3.62-4.87 3.62H0V5h5.588c2.88 0 4.57 1.37 4.57 3.48 0 1.07-.43 1.88-1.19 2.47v.53zm-7.19-1.8h3.02c.996 0 1.61-.44 1.61-1.33 0-.85-.584-1.31-1.63-1.31H2.78v2.64zm3.38 4.72c1.08 0 1.71-.5 1.71-1.43 0-.94-.63-1.43-1.71-1.43H2.78v2.86h3.38z",
+    dribbble:   "M12 24C5.385 24 0 18.615 0 12S5.385 0 12 0s12 5.385 12 12-5.385 12-12 12zm10.12-10.358c-.35-.11-3.17-.953-6.384-.438 1.34 3.684 1.887 6.684 1.992 7.308 2.3-1.555 3.936-4.02 4.395-6.87zm-6.115 7.808c-.153-.9-.75-4.032-2.19-7.77l-.066.02c-5.79 2.015-7.86 6.017-8.04 6.4 1.73 1.358 3.92 2.166 6.29 2.166 1.42 0 2.77-.29 4-.816zm-11.62-2.073c.232-.4 3.045-5.055 8.332-6.765.135-.045.27-.084.405-.12-.26-.585-.54-1.167-.832-1.74C7.17 11.775 2.206 11.84 1.756 11.84c-.037 0-.075 0-.113-.002-.014.18-.02.36-.02.54 0 2.51.96 4.8 2.525 6.523zm10.34-17.038c-1.22 1.595-3.7 5.26-4.69 7.83 4.47-.54 8.53-.52 11.18-.08-1.26-3.31-3.84-5.95-6.49-7.75zM8.77 8.073c.99-2.58 3.42-6.44 4.72-8.07C13.16 0 12.585 0 12 0 8.39 0 5.13 1.6 2.89 4.14c.77.01 3.14.06 5.88-.067zM2.16 5.727c-.004.12-.004.238-.004.36 0 .76.1 1.497.284 2.2C5.4 8.13 8.37 8.5 12 7.1c.04.09.08.18.12.27l1.26-2.66C10.14 3.42 5.5 3.08 2.16 5.727z",
+    trustpilot: "M12 0L9.353 8.18H0l7.323 5.322-2.647 8.18L12 16.36l7.324 5.322-2.647-8.18L24 8.18h-9.353L12 0z",
+    patreon:    "M14.82 2.41c3.96 0 7.18 3.24 7.18 7.21 0 3.96-3.22 7.18-7.18 7.18-3.97 0-7.21-3.22-7.21-7.18 0-3.97 3.24-7.21 7.21-7.21zM2 21.6h3.5V2.41H2V21.6z",
+    twitch:     "M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z",
+    kick:       "M1.5 0h21C23.33 0 24 .67 24 1.5v21c0 .83-.67 1.5-1.5 1.5h-21C.67 24 0 23.33 0 22.5v-21C0 .67.67 0 1.5 0zm4.25 6v12h3V14l1.5 1.5L13 18h4l-4.5-6L17 6h-4l-3.75 4.5V6h-3.5z",
+  };
+
+  const d = icons[icon];
+  if (!d) return null;
+  return (
+    <svg viewBox="0 0 24 24" width={15} height={15} fill="currentColor" aria-hidden>
+      <path d={d} />
+    </svg>
+  );
+};
 
 export default function Footer() {
   return (
-    <footer className="bg-charcoal-gray text-warm-white" style={{"backgroundImage": "url('/footer.jpg')", "backgroundRepeat": "no-repeat", "backgroundSize": "cover", "backgroundPosition": "center"}}>
+    <footer
+      className="text-warm-white"
+      style={{
+        backgroundImage: "url('/footer.jpg')",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundColor: "var(--charcoal-gray)",
+      }}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          {/* Address Column */}
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-warm-white mb-6">Address</h3>
-            <div className="space-y-2">
-              <p className="text-warm-white/80 leading-relaxed">Germany — 785 15th Street, Office</p>
-              <p className="text-warm-white/80 leading-relaxed">478 Berlin, De 81566</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+
+          {/* Address */}
+          <div className="space-y-3">
+            <h3 className="text-xl font-semibold mb-4">Address</h3>
+            <p className="text-warm-white/80 leading-relaxed">Germany — 785 15th Street, Office</p>
+            <p className="text-warm-white/80 leading-relaxed">478 Berlin, De 81566</p>
+          </div>
+
+          {/* Say Hello */}
+          <div className="space-y-3">
+            <h3 className="text-xl font-semibold mb-4">Say Hello</h3>
+            <p className="text-warm-white/80">info@inkspirefolio.com</p>
+            <p className="text-2xl font-bold">+1 3136127389</p>
+          </div>
+
+          {/* Social */}
+          <div className="space-y-3">
+            <h3 className="text-xl font-semibold mb-4">Follow Us</h3>
+            <div className="flex flex-wrap gap-2">
+              {socialLinks.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  title={s.label}
+                  className="flex items-center justify-center w-8 h-8 rounded-lg border border-warm-white/20 bg-warm-white/5 text-warm-white/70 hover:bg-[var(--flame-orange)] hover:border-[var(--flame-orange)] hover:text-white transition-all duration-200 hover:-translate-y-0.5"
+                >
+                  <SocialIcon icon={s.icon} />
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Say Hello Column */}
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-warm-white mb-6">Say Hello</h3>
-            <div className="space-y-4">
-              <p className="text-warm-white/80">info@inkspirefolio.com</p>
-              <p className="text-2xl font-bold text-warm-white">+1 3136127389</p>
-            </div>
-          </div>
-
-          {/* Social Column */}
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-warm-white mb-6">Social</h3>
-            <div className="space-y-3">
-              <a
-                href="#"
-                className="block text-warm-white/80 hover:text-flame-orange transition-colors font-medium tracking-wider"
-              >
-                FACEBOOK
-              </a>
-              <a
-                href="#"
-                className="block text-warm-white/80 hover:text-flame-orange transition-colors font-medium tracking-wider"
-              >
-                TWITTER
-              </a>
-              <a
-                href="#"
-                className="block text-warm-white/80 hover:text-flame-orange transition-colors font-medium tracking-wider"
-              >
-                LINKEDIN
-              </a>
-              <a
-                href="#"
-                className="block text-warm-white/80 hover:text-flame-orange transition-colors font-medium tracking-wider"
-              >
-                INSTAGRAM
-              </a>
-            </div>
-          </div>
-
-          {/* Newsletter Column */}
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-warm-white mb-6">Newsletter</h3>
+          {/* Newsletter */}
+          <div className="space-y-3">
+            <h3 className="text-xl font-semibold mb-4">Newsletter</h3>
             <div className="flex">
               <input
                 type="email"
                 placeholder="Type Your Email"
-                className="flex-1 bg-transparent border-b border-warm-white/30 pb-2 text-warm-white placeholder-warm-white/60 focus:outline-none focus:border-flame-orange transition-colors"
+                className="flex-1 bg-transparent border-b border-warm-white/30 pb-2 text-warm-white placeholder-warm-white/60 focus:outline-none focus:border-[var(--flame-orange)] transition-colors"
               />
-              <button className="ml-4 text-flame-orange hover:text-flame-orange/80 transition-colors">
+              <button className="ml-4 text-[var(--flame-orange)] hover:text-[var(--flame-orange)]/80 transition-colors">
                 <ArrowUpRight className="w-5 h-5" />
               </button>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-warm-white/20">
-          <div className="mb-4 md:mb-0 flex items-center">
-            <div className="rounded-lg p-2 mr-3">
-              <Image src="/logos/logo-08.png" alt="Inkspire Folio" width={120} height={40} className="h-15 w-auto" />
+        {/* Bottom bar */}
+        <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-warm-white/20 gap-4">
+          <div className="flex items-center gap-6">
+            <Image src="/logos/logo-08.png" alt="Inkspire Folio" width={120} height={40} className="h-12 w-auto" />
+            <div className="flex items-center gap-4 text-sm text-warm-white/60">
+              <Link href="/privacy-policy" className="hover:text-[var(--flame-orange)] transition-colors">Privacy Policy</Link>
+              <span>·</span>
+              <Link href="/terms-and-conditions" className="hover:text-[var(--flame-orange)] transition-colors">Terms &amp; Conditions</Link>
             </div>
           </div>
-          <div className="text-sm text-warm-white/60">
-            © 2023 Inkspire Folio. All rights reserved.
-          </div>
+          <p className="text-sm text-warm-white/60">© {new Date().getFullYear()} Inkspire Folio. All rights reserved.</p>
         </div>
       </div>
     </footer>
-  )
+  );
 }

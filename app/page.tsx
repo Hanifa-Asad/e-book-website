@@ -18,39 +18,39 @@ export default function HomePage() {
   const services = [
     {
       icon: "/icons/1.png",
-      title: "Branding",
+      title: "Book Publishing",
       description:
-        "Discover the core of your brand with Inkspirefolio, a creative design agency crafting bold, strategic identities that stand out. From Toronto to Washington D.C., we transform ideas into impactful brand experiences that connect and inspire. Whether you're starting fresh or rebranding, we bring clarity, creativity, and purpose to every step of the journey.",
+        "Transform your manuscript into a published book with our comprehensive publishing services. From editing and formatting to cover design and distribution across major platforms like Amazon KDP, Barnes & Noble, and Apple Books, we handle every aspect of the publishing process.",
     },
     {
       icon: "/icons/2.png",
-      title: "Logo Design",
+      title: "Book Marketing",
       description:
-        "At Inkspirefolio, we design logos that do more than look good — they speak your brand’s truth. With a team of expert creatives, our agency blends strategy and artistry to craft bold, timeless identities. From Toronto to DC and beyond, we help brands leave lasting impressions through purposeful, professional design.",
+        "Maximize your book's visibility and sales with our expert marketing strategies. We create targeted campaigns, build author platforms, leverage social media and influencers, and optimize your book's presence on online marketplaces.",
     },
     {
       icon: "/icons/3.png",
-      title: "Social Media",
+      title: "Author Web Design",
       description:
-        "At Inkspirefolio, we turn scrolls into connections and clicks into conversations. Our expert team — from Toronto to DC — crafts compelling social media content that builds trust, sparks engagement, and grows authentic communities. With strategy, creativity, and a deep understanding of digital culture, we help your brand not just show up online — but stand out.",
+        "Build a professional online presence with custom author websites. We create responsive, engaging sites that showcase your books, build your email list, and help you connect with readers worldwide.",
     },
     {
       icon: "/icons/4.png",
-      title: "Web Design And Development",
+      title: "Book Editing",
       description:
-        "At Inkspirefolio, we believe your website should do more than exist — it should perform. Our design agency team, from Toronto to DC, specializes in crafting immersive, responsive, and conversion-driven web experiences. Blending aesthetic excellence with seamless functionality, we design and develop digital spaces that captivate visitors and elevate your brand.",
+        "Elevate your manuscript with professional editing services. Our experienced editors provide developmental editing, copy editing, and proofreading to ensure your book is polished, error-free, and ready for publication.",
     },
     {
       icon: "/icons/5.png",
-      title: "Animation",
+      title: "Audiobooks",
       description:
-        "At InkspireFolio, we bring ideas to life through dynamic animations that captivate, explain, and engage. Our creative animation team blends storytelling with motion design to transform complex concepts into clear and visually stunning experiences. From explainer videos and social media content to brand campaigns and product showcases, we craft animations that not only grab attention but also resonate with your audience and elevate your brand presence.",
+        "Expand your audience with professional audiobook production. We handle narration, sound engineering, and distribution to platforms like Audible, Apple Books, and Spotify, giving readers another way to enjoy your story.",
     },
     {
       icon: "/icons/6.png",
-      title: "Video Editing",
+      title: "Ghostwriting",
       description:
-        "At Inkspirefolio, we turn raw footage into compelling visual stories that connect, inspire, and convert. Our expert video editing team blends cinematic precision with brand storytelling to craft content that leaves a lasting impact. Whether it's for social media, brand campaigns, or promotional materials, we shape every frame to reflect your vision and elevate your message.",
+        "Bring your ideas to life with professional ghostwriting services. Our experienced writers capture your voice and vision, transforming your concepts into compelling, well-structured manuscripts.",
     },
     {
       icon: "/icons/7.png",

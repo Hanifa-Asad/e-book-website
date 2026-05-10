@@ -7,51 +7,51 @@ export default function BlogPage() {
   const blogPosts = [
     {
       id: 1,
-      title: "Free advertising for your online business.",
-      date: "AUGUST 6, 2022",
-      categories: ["Marketing", "Design"],
-      image: "/placeholder.svg?height=300&width=400",
-      slug: "network-wormholes-colonies", // Added slug for routing
+      title: "How to Self-Publish Your Book Successfully",
+      date: "AUGUST 6, 2024",
+      categories: ["Publishing", "Self-Publishing"],
+      image: "/Blogs/blog1.jpg",
+      slug: "self-publish-book-guide",
     },
     {
       id: 2,
-      title: "Building a Strong Brand Identity: A Complete Guide",
-      date: "MARCH 12, 2024",
-      categories: ["Branding", "Strategy"],
-      image: "/placeholder.svg?height=300&width=400",
-      slug: "network-wormholes-colonies", // Added slug for routing
+      title: "The Ultimate Guide to Amazon KDP Publishing",
+      date: "JULY 15, 2024",
+      categories: ["Amazon KDP", "Publishing"],
+      image: "/Blogs/blog2.jpg",
+      slug: "amazon-kdp-guide",
     },
     {
       id: 3,
-      title: "Color Psychology in Web Design: What You Need to Know",
-      date: "MARCH 10, 2024",
-      categories: ["Web Design", "Psychology"],
-      image: "/placeholder.svg?height=300&width=400",
-      slug: "network-wormholes-colonies", // Added slug for routing
+      title: "Book Marketing Strategies That Work in 2024",
+      date: "JUNE 20, 2024",
+      categories: ["Marketing", "Book Promotion"],
+      image: "/Blogs/blog3.jpg",
+      slug: "book-marketing-2024",
     },
     {
       id: 4,
-      title: "The Rise of Minimalist Design: Less is More",
-      date: "MARCH 8, 2024",
-      categories: ["Design Philosophy", "Trends"],
-      image: "/placeholder.svg?height=300&width=400",
-      slug: "network-wormholes-colonies", // Added slug for routing
+      title: "Why Professional Book Editing Matters",
+      date: "MAY 10, 2024",
+      categories: ["Editing", "Writing"],
+      image: "/Blogs/blog4.jpg",
+      slug: "professional-book-editing",
     },
     {
       id: 5,
-      title: "Social Media Design Best Practices for 2024",
-      date: "MARCH 5, 2024",
-      categories: ["Social Media", "Design"],
-      image: "/placeholder.svg?height=300&width=400",
-      slug: "network-wormholes-colonies", // Added slug for routing
+      title: "Creating Stunning Book Covers That Sell",
+      date: "APRIL 5, 2024",
+      categories: ["Design", "Book Covers"],
+      image: "/Blogs/blog5.jpg",
+      slug: "book-cover-design-tips",
     },
     {
       id: 6,
-      title: "Typography Trends That Will Define This Year",
-      date: "MARCH 3, 2024",
-      categories: ["Typography", "Trends"],
-      image: "/placeholder.svg?height=300&width=400",
-      slug: "network-wormholes-colonies", // Added slug for routing
+      title: "The Rise of Audiobooks: A Complete Guide",
+      date: "MARCH 12, 2024",
+      categories: ["Audiobooks", "Publishing"],
+      image: "/Blogs/blog6.jpg",
+      slug: "audiobooks-guide",
     },
   ]
 
@@ -96,7 +96,7 @@ export default function BlogPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {blogPosts.map((post) => (
-              <Link key={post.id} href={`/blog/${post.slug}`} className="block">
+              <div key={post.id} className="block">
                 <article className="bg-charcoal-gray rounded-2xl overflow-hidden group cursor-pointer hover:transform hover:scale-[1.02] transition-all duration-300">
                   <div className="flex h-64">
                     {/* Left side - Image */}
@@ -136,7 +136,7 @@ export default function BlogPage() {
                     </div>
                   </div>
                 </article>
-              </Link>
+              </div>
             ))}
           </div>
         </div>
