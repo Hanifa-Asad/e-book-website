@@ -1,59 +1,18 @@
-"use client"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
-import Link from "next/link" // Added Link import for navigation
+import Link from "next/link"
+import { getAllBlogPosts } from "@/lib/contentful"
 
-export default function BlogPage() {
-  const blogPosts = [
-    {
-      id: 1,
-      title: "How to Self-Publish Your Book Successfully",
-      date: "AUGUST 6, 2024",
-      categories: ["Publishing", "Self-Publishing"],
-      image: "/Blogs/blog1.jpg",
-      slug: "self-publish-book-guide",
-    },
-    {
-      id: 2,
-      title: "The Ultimate Guide to Amazon KDP Publishing",
-      date: "JULY 15, 2024",
-      categories: ["Amazon KDP", "Publishing"],
-      image: "/Blogs/blog2.jpg",
-      slug: "amazon-kdp-guide",
-    },
-    {
-      id: 3,
-      title: "Book Marketing Strategies That Work in 2024",
-      date: "JUNE 20, 2024",
-      categories: ["Marketing", "Book Promotion"],
-      image: "/Blogs/blog3.jpg",
-      slug: "book-marketing-2024",
-    },
-    {
-      id: 4,
-      title: "Why Professional Book Editing Matters",
-      date: "MAY 10, 2024",
-      categories: ["Editing", "Writing"],
-      image: "/Blogs/blog4.jpg",
-      slug: "professional-book-editing",
-    },
-    {
-      id: 5,
-      title: "Creating Stunning Book Covers That Sell",
-      date: "APRIL 5, 2024",
-      categories: ["Design", "Book Covers"],
-      image: "/Blogs/blog5.jpg",
-      slug: "book-cover-design-tips",
-    },
-    {
-      id: 6,
-      title: "The Rise of Audiobooks: A Complete Guide",
-      date: "MARCH 12, 2024",
-      categories: ["Audiobooks", "Publishing"],
-      image: "/Blogs/blog6.jpg",
-      slug: "audiobooks-guide",
-    },
-  ]
+export default async function BlogPage() {
+  let blogPosts = []
+  let error = null
+
+  try {
+    blogPosts = await getAllBlogPosts()
+  } catch (err) {
+    console.error('Error fetching blog posts:', err)
+    error = 'Failed to load blog posts. Please try again later.'
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -94,16 +53,25 @@ export default function BlogPage() {
       {/* Blog Posts Grid */}
       <section className="py-20 px-4 bg-charcoal-gray">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {error ? (
+            <div className="text-center py-20">
+              <p className="text-warm-white text-lg">{error}</p>
+            </div>
+          ) : blogPosts.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-warm-white text-lg">No blog posts available yet. Check back soon!</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {blogPosts.map((post) => (
-              <div key={post.id} className="block">
+              <div key={post.sys.id} className="block">
                 <article className="bg-charcoal-gray rounded-2xl overflow-hidden group cursor-pointer hover:transform hover:scale-[1.02] transition-all duration-300">
                   <div className="flex h-64">
                     {/* Left side - Image */}
                     <div className="w-1/2 relative overflow-hidden">
                       <img
-                        src={post.image || "/placeholder.svg"}
-                        alt={post.title}
+                        src={post.fields.image ? `https:${post.fields.image.fields.file.url}` : "/placeholder.svg"}
+                        alt={post.fields.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
@@ -111,15 +79,21 @@ export default function BlogPage() {
                     {/* Right side - Content */}
                     <div className="w-1/2 p-6 flex flex-col justify-between bg-flame-orange">
                       <div>
-                        <p className="text-white/80 text-sm font-medium tracking-wider uppercase mb-4">{post.date}</p>
+                        <p className="text-white/80 text-sm font-medium tracking-wider uppercase mb-4">
+                          {new Date(post.sys.createdAt).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          }).toUpperCase()}
+                        </p>
                         <h3 className="text-xl font-bold text-white mb-6 leading-tight group-hover:text-charcoal-gray transition-colors duration-300">
-                          {post.title}
+                          {post.fields.title}
                         </h3>
                       </div>
 
                       <div className="flex gap-2">
                         <Link
-                          href={`/blog/${post.slug}`}
+                          href={`/blog/${post.fields.slug}`}
                           className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium hover:!bg-white hover:!text-flame-orange transition-all duration-300 flex items-center gap-2 inline-flex"
                         >
                           Visit
@@ -138,7 +112,8 @@ export default function BlogPage() {
                 </article>
               </div>
             ))}
-          </div>
+            </div>
+          )}
         </div>
       </section>
 
