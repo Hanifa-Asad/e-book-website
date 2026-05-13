@@ -28,10 +28,15 @@ export default function Popup() {
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          position: "relative", width: "100%", maxWidth: "600px",
-          borderRadius: "12px", overflow: "hidden",
+          position: "relative",
+          width: "100%",
+          maxWidth: "500px",
+          aspectRatio: "1 / 1",
+          borderRadius: "12px",
+          overflow: "hidden",
           boxShadow: "0 25px 60px rgba(0,0,0,0.6)",
           animation: "popupSlideUp 0.4s ease forwards",
+          maxHeight: "calc(100vh - 2rem)",
         }}
       >
         {/* Close button */}
@@ -52,7 +57,7 @@ export default function Popup() {
         </button>
 
         {/* Image — place your banner at /public/popup-banner.jpg */}
-        <div style={{ position: "relative", width: "100%", aspectRatio: "16/9" }}>
+        <div style={{ position: "relative", width: "100%", height: "100%" }}>
           <Image
             src="/popup-banner.jpg"
             alt="Special Offer"
